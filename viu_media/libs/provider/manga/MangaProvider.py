@@ -39,7 +39,7 @@ class MangaProvider:
     def lazyload_provider(self, provider):
         """updates the current provider being used"""
         _, anime_provider_cls_name = manga_sources[provider].split(".", 1)
-        package = f"fastanime.libs.manga_provider.{provider}"
+        package = f"viu_media.libs.manga_provider.{provider}"
         provider_api = importlib.import_module(".api", package)
         manga_provider = getattr(provider_api, anime_provider_cls_name)
         self.manga_provider = manga_provider()

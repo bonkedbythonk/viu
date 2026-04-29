@@ -43,7 +43,7 @@ class AnimeProviderFactory:
         module_name, class_name = import_path.split(".", 1)
 
         # Construct the full package path for dynamic import
-        package_path = f"fastanime.libs.provider.anime.{provider_name.value.lower()}"
+        package_path = f"viu_media.libs.provider.anime.{provider_name.value.lower()}"
 
         try:
             provider_module = importlib.import_module(f".{module_name}", package_path)
