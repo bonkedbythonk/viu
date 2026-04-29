@@ -20,33 +20,25 @@ def mock_config():
 
 @pytest.fixture
 def mock_auth_service():
-    with patch(
-        "viu_media.cli.commands.anilist.commands.auth.AuthService"
-    ) as mock:
+    with patch("viu_media.cli.service.auth.AuthService") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_feedback_service():
-    with patch(
-        "viu_media.cli.commands.anilist.commands.auth.FeedbackService"
-    ) as mock:
+    with patch("viu_media.cli.service.feedback.FeedbackService") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_selector():
-    with patch(
-        "viu_media.cli.commands.anilist.commands.auth.create_selector"
-    ) as mock:
+    with patch("viu_media.libs.selectors.selector.create_selector") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_api_client():
-    with patch(
-        "viu_media.cli.commands.anilist.commands.auth.create_api_client"
-    ) as mock:
+    with patch("viu_media.libs.media_api.api.create_api_client") as mock:
         yield mock
 
 
