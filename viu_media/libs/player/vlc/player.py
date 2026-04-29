@@ -131,6 +131,12 @@ class VlcPlayer(BasePlayer):
         if params.title:
             args.extend(["--video-title", params.title])
 
+        if params.headers:
+            if "User-Agent" in params.headers:
+                args.extend(["--http-user-agent", params.headers["User-Agent"]])
+            if "Referer" in params.headers:
+                args.extend(["--http-referrer", params.headers["Referer"]])
+
         if self.config.args:
             args.extend(self.config.args.split(","))
 

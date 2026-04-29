@@ -236,7 +236,11 @@ class AnimePahe(BaseAnimeProvider):
             stream_link = juicy_stream
 
         if translation_type and quality and stream_link:
-            yield map_to_server(episode, translation_type, quality, stream_link)
+            headers = {
+                "Referer": "https://kwik.cx/",
+                "User-Agent": self.client.headers["User-Agent"]
+            }
+            yield map_to_server(episode, translation_type, quality, stream_link, headers)
 
     @lru_cache()
     def _get_episode_info(
