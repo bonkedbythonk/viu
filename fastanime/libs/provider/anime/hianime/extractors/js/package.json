@@ -1,0 +1,9 @@
+{
+  "name": "hianime-extractor-helper",
+  "version": "1.0.0",
+  "description": "Helper script to decrypt MegaCloud sources for FastAnime.",
+  "main": "megacloud_decrypt.js",
+  "dependencies": {
+    "crypto-js": "^4.2.0"
+  }
+}
