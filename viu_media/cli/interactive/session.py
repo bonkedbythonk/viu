@@ -122,20 +122,20 @@ class Context:
             media_api = create_api_client(self.config.general.media_api, self.config)
 
             auth = self.auth
-            if auth_profile := auth.get_auth():
+            token = auth.resolve_token()
+            if token:
                 try:
-                    p = media_api.authenticate(auth_profile.token)
+                    p = media_api.authenticate(token)
                     if p:
                         logger.debug(f"Authenticated as {p.name}")
                     else:
                         logger.warning(
-                            f"Failed to authenticate with {auth_profile.token}"
+                            "Token was rejected by the API — it may be invalid or expired."
                         )
                 except httpx.ConnectError as e:
                     logger.warning(f"It seems you are offline: {e}")
-
             else:
-                logger.debug("Not authenticated")
+                logger.debug("Not authenticated — no token found in any source.")
             self._media_api = media_api
 
         return self._media_api

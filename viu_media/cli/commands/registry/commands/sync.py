@@ -71,15 +71,22 @@ def sync(
         download = upload = True
 
     # Check authentication
-
-    if profile := auth.get_auth():
-        if not media_api_client.authenticate(profile.token):
+    token = auth.resolve_token()
+    if token:
+        if not media_api_client.authenticate(token):
             feedback.error(
-                "Authentication Required",
-                f"You must be logged in to {api} to sync your media list.",
+                "Authentication Failed",
+                "The token may be invalid or expired.\n"
+                "Set $ANILIST_TOKEN or run 'viu anilist auth --token <token>'.",
             )
-            feedback.info("Run this command to authenticate:", f"viu {api} auth")
             raise click.Abort()
+    else:
+        feedback.error(
+            "Authentication Required",
+            f"You must be logged in to {api} to sync your media list.\n"
+            "Set $ANILIST_TOKEN or run 'viu anilist auth --token <token>'.",
+        )
+        raise click.Abort()
 
     # Determine which statuses to sync
     status_list = (

@@ -20,12 +20,15 @@ def notifications(config: AppConfig):
     console = Console()
     auth = AuthService(config.general.media_api)
     api_client = create_api_client(config.general.media_api, config)
-    if profile := auth.get_auth():
-        api_client.authenticate(profile.token)
+
+    token = auth.resolve_token()
+    if token:
+        api_client.authenticate(token)
 
     if not api_client.is_authenticated():
         feedback.error(
-            "Authentication Required", "Please log in with 'viu anilist auth'."
+            "Authentication Required",
+            "No valid token found. Set $ANILIST_TOKEN or run 'viu anilist auth --token <token>'.",
         )
         return
 

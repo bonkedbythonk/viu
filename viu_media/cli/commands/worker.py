@@ -29,9 +29,10 @@ def worker(config: AppConfig):
     media_api = create_api_client(config.general.media_api, config)
     # Authenticate if credentials exist (enables notifications)
     auth = AuthService(config.general.media_api)
-    if profile := auth.get_auth():
+    token = auth.resolve_token()
+    if token:
         try:
-            media_api.authenticate(profile.token)
+            media_api.authenticate(token)
         except Exception:
             pass
     provider = create_provider(config.general.provider)

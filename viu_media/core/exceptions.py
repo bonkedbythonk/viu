@@ -24,6 +24,30 @@ class ConfigError(ViuError):
     pass
 
 
+class AuthenticationError(ViuError):
+    """
+    Raised when no valid AniList token can be resolved from any source.
+
+    Provides clear, actionable remediation instructions to the user.
+    """
+
+    def __init__(self, reason: str = ""):
+        lines = [
+            reason or "No AniList token found.",
+            "",
+            "To authenticate, provide your token using one of these methods (in priority order):",
+            "  1. CLI flag:     viu anilist auth --token <your_token>",
+            "  2. CLI argument: viu anilist auth /path/to/token.txt",
+            "  3. Env var:      export ANILIST_TOKEN='<your_token>'",
+            "  4. Token file:   Save your token to ~/.config/viu/token.txt",
+            "  5. Config file:  Add 'token = \"<your_token>\"' under [anilist] in config.toml",
+            "",
+            "To obtain a token, visit:",
+            "  https://anilist.co/api/v2/oauth/authorize?client_id=20148&response_type=token",
+        ]
+        super().__init__("\n".join(lines))
+
+
 class DependencyNotFoundError(ViuError):
     """
     A required external command-line tool (e.g., ffmpeg, fzf) was not found.

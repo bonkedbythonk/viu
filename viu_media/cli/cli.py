@@ -192,7 +192,7 @@ You can disable this message by turning off the welcome_screen option in the con
                 _cli_cmd_name = "viu" if not shutil.which("viu-media") else "viu-media"
                 cmd = [_cli_cmd_name, "config", "--update"]
                 print(f"running '{' '.join(cmd)}'...")
-                subprocess.run(cmd)
+                subprocess.run(cmd, check=False)
 
             if is_latest:
                 print_release_json(release_json)
