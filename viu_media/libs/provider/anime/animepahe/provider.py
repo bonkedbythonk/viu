@@ -1,4 +1,5 @@
 import logging
+import re
 from functools import lru_cache
 from typing import Iterator, Optional
 
@@ -10,6 +11,7 @@ from .constants import (
     ANIMEPAHE_BASE,
     ANIMEPAHE_ENDPOINT,
     JUICY_STREAM_REGEX,
+    KWIK_HOST,
     REQUEST_HEADERS,
     SERVER_HEADERS,
 )
@@ -23,6 +25,42 @@ logger = logging.getLogger(__name__)
 class AnimePahe(BaseAnimeProvider):
     HEADERS = REQUEST_HEADERS
 
+    def __init__(self, client):
+        super().__init__(client)
+        self._solve_ddos_guard()
+
+    def _solve_ddos_guard(self):
+        """Solve DDoS-Guard challenge to get required session cookies."""
+        import time
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                # First hit the main page to get initial cookies
+                self.client.get(ANIMEPAHE_BASE)
+                
+                # Fetch check.js without the animepahe.pw Host header
+                check_resp = self.client.get("https://check.ddos-guard.net/check.js", headers={"Host": "check.ddos-guard.net"})
+                check_resp.raise_for_status()
+                
+                # Extract the image paths that set the __ddg2_ cookie
+                paths = re.findall(r"['\"]([^'\"]+id[^'\"]+)['\"]", check_resp.text)
+                
+                # Fetch each path to finalize cookie setup
+                for path in paths:
+                    url = path if path.startswith("http") else f"{ANIMEPAHE_BASE}{path}"
+                    # Need to use correct Host header for animepahe domains
+                    host_header = "check.ddos-guard.net" if "ddos-guard.net" in url else "animepahe.pw"
+                    self.client.get(url, headers={"Host": host_header})
+                    
+                logger.debug("DDoS-Guard bypass successful")
+                return
+            except Exception as e:
+                logger.warning(f"DDoS-Guard bypass attempt {attempt + 1} failed: {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(1)
+                else:
+                    logger.error("Failed to solve DDoS-Guard challenge after all retries")
+
     @debug_provider
     def search(self, params: SearchParams) -> SearchResults | None:
         return self._search(params)
@@ -30,11 +68,31 @@ class AnimePahe(BaseAnimeProvider):
     @lru_cache()
     def _search(self, params: SearchParams) -> SearchResults | None:
         url_params = {"m": "search", "q": params.query}
-        response = self.client.get(ANIMEPAHE_ENDPOINT, params=url_params)
+        response = self.client.get(
+            ANIMEPAHE_ENDPOINT,
+            params=url_params,
+            headers={"X-Requested-With": "XMLHttpRequest"},
+        )
         response.raise_for_status()
-        data: AnimePaheSearchPage = response.json()
+
+        # AnimePahe may return HTML on error or empty text
+        content_type = response.headers.get("content-type", "")
+        if "application/json" not in content_type and "text/json" not in content_type:
+            logger.warning(
+                f"Unexpected content type from AnimePahe search: {content_type}"
+            )
+            # Try parsing as JSON anyway — some servers omit the content-type
+            try:
+                data: AnimePaheSearchPage = response.json()
+            except Exception:
+                logger.error("AnimePahe search returned non-JSON response")
+                return None
+        else:
+            data = response.json()
+
         if not data.get("data"):
-            return
+            logger.debug(f"No search results for query: {params.query}")
+            return None
         return map_to_search_results(data)
 
     @debug_provider
@@ -133,18 +191,23 @@ class AnimePahe(BaseAnimeProvider):
         translation_type = None
         stream_link = None
 
-        # TODO: better document the scraping process
         for res_dict in res_dicts:
-            # the actual attributes are data attributes in the original html 'prefixed with data-'
-            embed_url = res_dict["src"]
-            data_audio = "dub" if res_dict["audio"] == "eng" else "sub"
+            # The actual attributes are data attributes prefixed with 'data-'
+            # extract_attributes strips the 'data-' prefix
+            embed_url = res_dict.get("src", "")
+            data_audio = "dub" if res_dict.get("audio") == "eng" else "sub"
 
             if data_audio != params.translation_type:
                 continue
 
             if not embed_url:
-                logger.warning("embed url not found please report to the developers")
+                logger.warning("embed url not found, please report to the developers")
                 continue
+
+            # Ensure the embed URL uses the current Kwik domain
+            embed_url = re.sub(
+                r"kwik\.\w+", KWIK_HOST, embed_url
+            )
 
             embed_response = self.client.get(
                 embed_url,
@@ -152,6 +215,7 @@ class AnimePahe(BaseAnimeProvider):
                     "User-Agent": self.client.headers["User-Agent"],
                     **SERVER_HEADERS,
                 },
+                follow_redirects=True,
             )
             embed_response.raise_for_status()
             embed_page = embed_response.text
@@ -160,12 +224,14 @@ class AnimePahe(BaseAnimeProvider):
             if not decoded_js:
                 logger.error("failed to decode embed page")
                 continue
+
             juicy_stream = JUICY_STREAM_REGEX.search(decoded_js)
             if not juicy_stream:
-                logger.error("failed to find juicy stream")
+                logger.error("failed to find juicy stream URL in decoded JS")
                 continue
+
             juicy_stream = juicy_stream.group(1)
-            quality = res_dict["resolution"]
+            quality = res_dict.get("resolution", "720")
             translation_type = data_audio
             stream_link = juicy_stream
 
