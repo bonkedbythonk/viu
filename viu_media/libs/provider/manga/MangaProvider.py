@@ -7,7 +7,7 @@ import importlib
 import logging
 from typing import TYPE_CHECKING
 
-from .libs.manga_provider import manga_sources
+from . import manga_sources
 
 if TYPE_CHECKING:
     pass
@@ -39,7 +39,7 @@ class MangaProvider:
     def lazyload_provider(self, provider):
         """updates the current provider being used"""
         _, anime_provider_cls_name = manga_sources[provider].split(".", 1)
-        package = f"viu_media.libs.manga_provider.{provider}"
+        package = f"viu_media.libs.provider.manga.{provider}"
         provider_api = importlib.import_module(".api", package)
         manga_provider = getattr(provider_api, anime_provider_cls_name)
         self.manga_provider = manga_provider()

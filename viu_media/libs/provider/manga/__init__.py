@@ -1,1 +1,4 @@
-manga_sources = {"mangadex": "api.MangaDexApi"}
+manga_sources = {
+    "mangadex": "api.MangaDexApi",
+    "mangakatana": "api.MangaKatanaApi",
+}

@@ -69,6 +69,15 @@ def main(ctx: Context, state: State) -> State | InternalDirective:
         f"{'❌ ' if icons else ''}Exit": lambda: InternalDirective.EXIT,
     }
 
+    # Filter out hidden categories from the menu
+    hidden = ctx.config.general.hidden_categories
+    if hidden:
+        options = {
+            k: v
+            for k, v in options.items()
+            if not any(h.lower() in k.lower() for h in hidden)
+        }
+
     choice = ctx.selector.choose(
         prompt="Select Category",
         choices=list(options.keys()),

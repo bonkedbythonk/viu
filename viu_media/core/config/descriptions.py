@@ -38,6 +38,7 @@ GENERAL_NORMALIZE_TITLES = (
 )
 GENERAL_DISCORD = "Enable Discord Rich Presence to show your current activity."
 GENERAL_RECENT = "Number of recently watched anime to keep in history."
+GENERAL_HIDDEN_CATEGORIES = "List of category names to hide from the main menu (e.g., 'Planned', 'Dropped')."
 
 # StreamConfig
 STREAM_PLAYER = "The media player to use for streaming."

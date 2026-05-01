@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Literal
+from typing import List, Literal
 
 from pydantic import BaseModel, Field
 
@@ -223,6 +223,10 @@ class GeneralConfig(BaseModel):
         default=defaults.GENERAL_RECENT,
         ge=0,
         description=desc.GENERAL_RECENT,
+    )
+    hidden_categories: List[str] = Field(
+        default_factory=list,
+        description=desc.GENERAL_HIDDEN_CATEGORIES,
     )
 
 
