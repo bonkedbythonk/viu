@@ -8,6 +8,11 @@ from enum import Enum
 
 
 class MediaTag(Enum):
+    @classmethod
+    def _missing_(cls, value):
+        return cls.UNKNOWN
+
+    UNKNOWN = "Unknown"
     #
     # TECHNICAL
     #
