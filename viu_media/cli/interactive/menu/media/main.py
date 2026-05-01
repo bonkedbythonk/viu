@@ -6,6 +6,7 @@ from .....libs.media_api.params import MediaSearchParams, UserMediaListSearchPar
 from .....libs.media_api.types import (
     MediaSort,
     MediaStatus,
+    MediaType,
     UserMediaListStatus,
 )
 from ...session import Context, session
@@ -39,6 +40,7 @@ def main(ctx: Context, state: State) -> State | InternalDirective:
             ctx, state, UserMediaListStatus.PLANNING
         ),
         f"{'🔎 ' if icons else ''}Search": _create_search_media_list(ctx, state),
+        f"{' ' if icons else ''}Search Manga": _create_search_manga_list(ctx, state),
         f"{'🔍 ' if icons else ''}Dynamic Search": _create_dynamic_search_action(
             ctx, state
         ),
@@ -178,6 +180,37 @@ def _create_search_media_list(ctx: Context, state: State) -> MenuAction:
 
     return action
 
+
+def _create_search_manga_list(ctx: Context, state: State) -> MenuAction:
+    def action():
+        feedback = ctx.feedback
+
+        query = ctx.selector.ask("Search for Manga")
+        if not query:
+            return InternalDirective.MAIN
+
+        search_params = MediaSearchParams(query=query, type=MediaType.MANGA)
+
+        loading_message = "Fetching media list"
+        result = None
+        with feedback.progress(loading_message):
+            result = ctx.media_api.search_media(search_params)
+
+        if result:
+            return State(
+                menu_name=MenuName.RESULTS,
+                media_api=MediaApiState(
+                    search_result={
+                        media_item.id: media_item for media_item in result.media
+                    },
+                    search_params=search_params,
+                    page_info=result.page_info,
+                ),
+            )
+        else:
+            return InternalDirective.MAIN
+
+    return action
 
 def _create_user_list_action(
     ctx: Context, state: State, status: UserMediaListStatus

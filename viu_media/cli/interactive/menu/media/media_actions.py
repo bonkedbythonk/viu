@@ -8,6 +8,7 @@ from .....libs.media_api.params import (
 from .....libs.media_api.types import (
     MediaItem,
     MediaStatus,
+    MediaType,
     UserMediaListStatus,
 )
 from .....libs.player.params import PlayerParams
@@ -43,64 +44,57 @@ def media_actions(ctx: Context, state: State) -> State | InternalDirective:
             for ep in record.media_episodes
         )
 
-    options: Dict[str, MenuAction] = {
-        f"{'▶️ ' if icons else ''}Stream {progress}": _stream(ctx, state),
-        f"{'📽️ ' if icons else ''}Episodes": _stream(
-            ctx, state, force_episodes_menu=True
-        ),
-    }
+    options: Dict[str, MenuAction] = {}
+    is_manga = media_item.type == MediaType.MANGA
 
-    if has_downloads:
-        options[f"{'💾 ' if icons else ''}Stream (Downloads)"] = _stream_downloads(
-            ctx, state
-        )
-        options[f"{'💿 ' if icons else ''}Episodes (Downloads)"] = _stream_downloads(
-            ctx, state, force_episodes_menu=True
-        )
-
-    options.update(
-        {
-            f"{'📥 ' if icons else ''}Download": _download_episodes(ctx, state),
-            f"{'📼 ' if icons else ''}Watch Trailer": _watch_trailer(ctx, state),
-            f"{'🔗 ' if icons else ''}Recommendations": _view_recommendations(
-                ctx, state
-            ),
-            f"{'🔄 ' if icons else ''}Related Anime": _view_relations(ctx, state),
+    if is_manga:
+        options = {
+            f"{' ' if icons else ''}Read Chapters": _read_chapters(ctx, state),
+            f"{'🔗 ' if icons else ''}Recommendations": _view_recommendations(ctx, state),
+            f"{'🔄 ' if icons else ''}Related Manga": _view_relations(ctx, state),
             f"{'👥 ' if icons else ''}Characters": _view_characters(ctx, state),
-            f"{'📅 ' if icons else ''}Airing Schedule": _view_airing_schedule(
-                ctx, state
-            ),
             f"{'📝 ' if icons else ''}View Reviews": _view_reviews(ctx, state),
-            f"{'➕ ' if icons else ''}Add/Update List": _manage_user_media_list(
-                ctx, state
-            ),
-            f"{'➕ ' if icons else ''}Add/Update List (Bulk)": _manage_user_media_list_in_bulk(
-                ctx, state
-            ),
-            f"{'⭐ ' if icons else ''}Score Anime": _score_anime(ctx, state),
-            f"{'🌐 ' if icons else ''}Open AniList Page": _open_anilist_page(
-                ctx, state
-            ),
+            f"{'➕ ' if icons else ''}Add/Update List": _manage_user_media_list(ctx, state),
+            f"{'⭐ ' if icons else ''}Score Manga": _score_anime(ctx, state),
+            f"{'🌐 ' if icons else ''}Open AniList Page": _open_anilist_page(ctx, state),
             f"{'ℹ️ ' if icons else ''}View Info": _view_info(ctx, state),
-            f"{'📀 ' if icons else ''}Change Provider (Current: {ctx.config.general.provider.value.upper()})": _change_provider(
-                ctx, state
-            ),
-            f"{'🔘 ' if icons else ''}Toggle Auto Select Anime (Current: {ctx.config.general.auto_select_anime_result})": _toggle_config_state(
-                ctx, state, "AUTO_ANIME"
-            ),
-            f"{'🔘 ' if icons else ''}Toggle Auto Next Episode (Current: {ctx.config.stream.auto_next})": _toggle_config_state(
-                ctx, state, "AUTO_EPISODE"
-            ),
-            f"{'🔘 ' if icons else ''}Toggle Continue From History (Current: {ctx.config.stream.continue_from_watch_history})": _toggle_config_state(
-                ctx, state, "CONTINUE_FROM_HISTORY"
-            ),
-            f"{'🔘 ' if icons else ''}Toggle Translation Type  (Current: {ctx.config.stream.translation_type.upper()})": _toggle_config_state(
-                ctx, state, "TRANSLATION_TYPE"
-            ),
             f"{'🔙 ' if icons else ''}Back to Results": lambda: InternalDirective.BACK,
             f"{'❌ ' if icons else ''}Exit": lambda: InternalDirective.EXIT,
         }
-    )
+    else:
+        options = {
+            f"{'▶️ ' if icons else ''}Stream {progress}": _stream(ctx, state),
+            f"{'📽️ ' if icons else ''}Episodes": _stream(ctx, state, force_episodes_menu=True),
+        }
+
+        if has_downloads:
+            options[f"{'💾 ' if icons else ''}Stream (Downloads)"] = _stream_downloads(ctx, state)
+            options[f"{'💿 ' if icons else ''}Episodes (Downloads)"] = _stream_downloads(ctx, state, force_episodes_menu=True)
+
+        options.update(
+            {
+                f"{'📥 ' if icons else ''}Download": _download_episodes(ctx, state),
+                f"{'📼 ' if icons else ''}Watch Trailer": _watch_trailer(ctx, state),
+                f"{'🔗 ' if icons else ''}Recommendations": _view_recommendations(ctx, state),
+                f"{'🔄 ' if icons else ''}Related Anime": _view_relations(ctx, state),
+                f"{'👥 ' if icons else ''}Characters": _view_characters(ctx, state),
+                f"{'📅 ' if icons else ''}Airing Schedule": _view_airing_schedule(ctx, state),
+                f"{'📝 ' if icons else ''}View Reviews": _view_reviews(ctx, state),
+                f"{'➕ ' if icons else ''}Add/Update List": _manage_user_media_list(ctx, state),
+                f"{'➕ ' if icons else ''}Add/Update List (Bulk)": _manage_user_media_list_in_bulk(ctx, state),
+                f"{'⭐ ' if icons else ''}Score Anime": _score_anime(ctx, state),
+                f"{'🌐 ' if icons else ''}Open AniList Page": _open_anilist_page(ctx, state),
+                f"{'ℹ️ ' if icons else ''}View Info": _view_info(ctx, state),
+                f"{'📀 ' if icons else ''}Change Provider (Current: {ctx.config.general.provider.value.upper()})": _change_provider(ctx, state),
+                f"{'🔘 ' if icons else ''}Toggle Auto Select Anime (Current: {ctx.config.general.auto_select_anime_result})": _toggle_config_state(ctx, state, "AUTO_ANIME"),
+                f"{'🔘 ' if icons else ''}Toggle Auto Next Episode (Current: {ctx.config.stream.auto_next})": _toggle_config_state(ctx, state, "AUTO_EPISODE"),
+                f"{'🔘 ' if icons else ''}Toggle Continue From History (Current: {ctx.config.stream.continue_from_watch_history})": _toggle_config_state(ctx, state, "CONTINUE_FROM_HISTORY"),
+                f"{'🔘 ' if icons else ''}Toggle Translation Type  (Current: {ctx.config.stream.translation_type.upper()})": _toggle_config_state(ctx, state, "TRANSLATION_TYPE"),
+                f"{'🔙 ' if icons else ''}Back to Results": lambda: InternalDirective.BACK,
+                f"{'❌ ' if icons else ''}Exit": lambda: InternalDirective.EXIT,
+            }
+        )
+
 
     choice = ctx.selector.choose(
         prompt="Select Action",
@@ -140,6 +134,111 @@ def _get_progress_string(ctx: Context, media_item: Optional[MediaItem]) -> str:
             display_title += f" {icon}{unwatched} new{icon}"
 
     return display_title
+
+
+def _read_chapters(ctx: Context, state: State) -> MenuAction:
+    def action():
+        feedback = ctx.feedback
+        media_item = state.media_api.media_item
+        
+        if not media_item:
+            return InternalDirective.RELOAD
+
+        manga_title = media_item.title.english or media_item.title.romaji
+        
+        from .....libs.provider.manga.MangaProvider import MangaProvider as MangaProviderManager
+        provider_name = "mangakatana"
+        manga_provider = MangaProviderManager(provider=provider_name)
+        
+        loading_message = f"Searching {provider_name} for '{manga_title}'"
+        search_results = None
+        with feedback.progress(loading_message):
+            search_results = manga_provider.search_for_manga(manga_title)
+            
+        if not search_results:
+            feedback.error(f"No results found on {provider_name} for {manga_title}")
+            return InternalDirective.RELOAD
+            
+        result_map = {result["title"]: result for result in search_results}
+        selected_title = ctx.selector.choose("Select Provider Match", list(result_map.keys()))
+        if not selected_title:
+            return InternalDirective.RELOAD
+            
+        selected_manga = result_map[selected_title]
+        manga_url = selected_manga["url"]
+        
+        manga_info = None
+        with feedback.progress(f"Fetching chapters"):
+            manga_info = manga_provider.get_manga(manga_url)
+            
+        if not manga_info or not manga_info.get("availableChapters"):
+            feedback.error("No chapters found")
+            return InternalDirective.RELOAD
+            
+        chapters = manga_info["availableChapters"]
+        chapter_map = {ch["title"]: ch for ch in chapters}
+        
+        while True:
+            selected_chapter_title = ctx.selector.choose(
+                "Select Chapter", list(chapter_map.keys())
+            )
+            if not selected_chapter_title:
+                break
+                
+            selected_chapter = chapter_map[selected_chapter_title]
+            chapter_url = selected_chapter["url"]
+            
+            chapter_data = None
+            with feedback.progress(f"Loading '{selected_chapter_title}'"):
+                chapter_data = manga_provider.get_chapter_thumbnails(
+                    manga_info["id"], chapter_url
+                )
+                
+            if not chapter_data or not chapter_data.get("thumbnails"):
+                feedback.error(f"Failed to load pages for {selected_chapter_title}")
+                continue
+                
+            thumbnails = chapter_data["thumbnails"]
+            
+            # Use native icat for kitty
+            from ....utils.icat import icat_manga_viewer
+            icat_manga_viewer(thumbnails, f"{manga_title} — {selected_chapter_title}")
+            
+            # sync anilist progress
+            import re
+            match = re.search(r"(?:chapter|ch\.?)\s*(\d+)", selected_chapter_title, re.IGNORECASE)
+            if not match:
+                match = re.search(r"(\d+)", selected_chapter_title)
+            
+            if match:
+                chapter_number = int(match.group(1))
+                current_progress = 0
+                if media_item.user_status and media_item.user_status.progress:
+                    current_progress = media_item.user_status.progress
+                    
+                if chapter_number > current_progress:
+                    from .....libs.media_api.params import UpdateUserMediaListEntryParams
+                    from .....libs.media_api.types import UserMediaListStatus
+                    
+                    success = ctx.media_api.update_list_entry(
+                        UpdateUserMediaListEntryParams(
+                            media_id=media_item.id,
+                            progress=str(chapter_number),
+                            status=UserMediaListStatus.WATCHING,
+                        )
+                    )
+                    if success:
+                        feedback.info(
+                            f"[cyan]AniList:[/] Updated [bold]{manga_title}[/] progress to chapter {chapter_number}"
+                        )
+                    
+            continue_reading = ctx.selector.choose("What next?", ["Select another chapter", "Exit"])
+            if not continue_reading or continue_reading == "Exit":
+                break
+                
+        return InternalDirective.RELOAD
+
+    return action
 
 
 def _stream(ctx: Context, state: State, force_episodes_menu=False) -> MenuAction:
