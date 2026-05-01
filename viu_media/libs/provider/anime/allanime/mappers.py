@@ -14,7 +14,7 @@ from .types import AllAnimeSearchResults, AllAnimeShow
 
 
 def generate_list(count: Union[int, str]) -> list[str]:
-    return list(map(str, range(int(count))))
+    return list(map(str, range(1, int(count) + 1)))
 
 
 translation_type_map = {

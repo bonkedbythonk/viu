@@ -53,69 +53,40 @@ CONFIG_FOOTER = f"""
 
 
 def generate_config_toml_from_app_model(app_model: AppConfig) -> str:
-    """Generate a TOML configuration file content from a Pydantic model with comments."""
+    """Generate a clean, minimal TOML configuration file content."""
 
-    config_content_parts = [CONFIG_HEADER]
+    minimal_toml = f"""{CONFIG_HEADER}
 
-    for section_name, section_model in app_model:
-        section_title = section_model.model_config.get("title", section_name.title())
+[general]
+welcome_screen = true
+icons = true
+api_client = "anilist"
+provider = "allanime"
+manga_viewer = "icat"
 
-        config_content_parts.append(f"\n#\n# {section_title}\n#")
-        config_content_parts.append(f"[{section_name}]")
+[stream]
+player = "iina"
+quality = "1080"
+translation_type = "sub"
+server = "TOP"
+auto_next = false
+continue_from_watch_history = true
 
-        for field_name, field_info in itertools.chain(
-            section_model.model_fields.items(),
-            section_model.model_computed_fields.items(),
-        ):
-            # --- Generate Comments ---
-            description = field_info.description or ""
-            if description:
-                wrapped_comment = textwrap.fill(
-                    description,
-                    width=78,
-                    initial_indent="# ",
-                    subsequent_indent="# ",
-                )
-                config_content_parts.append(f"\n{wrapped_comment}")
+[downloads]
+downloader = "auto"
+enable_tracking = true
+max_concurrent = 3
 
-            field_type_comment = _get_field_type_comment(field_info)
-            if field_type_comment:
-                wrapped_comment = textwrap.fill(
-                    field_type_comment,
-                    width=78,
-                    initial_indent="# ",
-                    subsequent_indent="# ",
-                )
-                config_content_parts.append(wrapped_comment)
+[anilist]
+# Add your AniList token below to enable tracking and sync features
+# token = "YOUR_TOKEN_HERE"
+preferred_language = "english"
 
-            if (
-                hasattr(field_info, "default")
-                and field_info.default is not PydanticUndefined
-            ):
-                default_val = (
-                    field_info.default.value
-                    if isinstance(field_info.default, Enum)
-                    else field_info.default
-                )
-                wrapped_comment = textwrap.fill(
-                    f"Default: {_format_toml_value(default_val)}",
-                    width=78,
-                    initial_indent="# ",
-                    subsequent_indent="# ",
-                )
-                config_content_parts.append(wrapped_comment)
+[fzf]
+header_color = "95,135,175"
 
-            # --- Generate Key-Value Pair ---
-            field_value = getattr(section_model, field_name)
-
-            if field_value is None:
-                config_content_parts.append(f"# {field_name} =")
-            else:
-                value_str = _format_toml_value(field_value)
-                config_content_parts.append(f"{field_name} = {value_str}")
-
-    config_content_parts.extend(["\n", CONFIG_FOOTER])
-    return "\n".join(config_content_parts)
+{CONFIG_FOOTER}"""
+    return minimal_toml
 
 
 def _format_toml_value(value: Any) -> str:

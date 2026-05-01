@@ -9,7 +9,9 @@ dependencies = [
     "click>=8.1.7",
     "httpx>=0.28.1",
     "inquirerpy>=0.3.4",
+    "pillow>=12.2.0",
     "pydantic>=2.11.7",
+    "requests>=2.33.1",
     "rich>=13.9.2",
 ]
 
