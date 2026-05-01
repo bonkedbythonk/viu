@@ -60,8 +60,14 @@ def results(ctx: Context, state: State) -> State | InternalDirective:
                 ctx.config,
             )
 
+            prompt = "Select Anime"
+            if state.media_api.search_params:
+                from .....libs.media_api.types import MediaType
+                if getattr(state.media_api.search_params, "type", None) == MediaType.MANGA:
+                    prompt = "Select Manga"
+
             choice = ctx.selector.choose(
-                prompt="Select Anime",
+                prompt=prompt,
                 choices=list(choices),
                 preview=preview_command,
             )
@@ -69,8 +75,14 @@ def results(ctx: Context, state: State) -> State | InternalDirective:
     else:
         # No preview mode
 
+        prompt = "Select Anime"
+        if state.media_api.search_params:
+            from .....libs.media_api.types import MediaType
+            if getattr(state.media_api.search_params, "type", None) == MediaType.MANGA:
+                prompt = "Select Manga"
+
         choice = ctx.selector.choose(
-            prompt="Select Anime",
+            prompt=prompt,
             choices=list(choices),
             preview=None,
         )

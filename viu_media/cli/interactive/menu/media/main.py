@@ -23,52 +23,52 @@ def main(ctx: Context, state: State) -> State | InternalDirective:
     feedback.clear_console()
 
     options: Dict[str, MenuAction] = {
-        f"{'🔥 ' if icons else ''}Trending": _create_media_list_action(
+        f"{' ' if icons else ''}Trending": _create_media_list_action(
             ctx, state, MediaSort.TRENDING_DESC
         ),
-        f"{'🎞️ ' if icons else ''}Recent": _create_recent_media_action(ctx, state),
-        f"{'📺 ' if icons else ''}Watching": _create_user_list_action(
+        f"{' ' if icons else ''}Recent": _create_recent_media_action(ctx, state),
+        f"{' ' if icons else ''}Watching": _create_user_list_action(
             ctx, state, UserMediaListStatus.WATCHING
         ),
-        f"{'🔁 ' if icons else ''}Rewatching": _create_user_list_action(
+        f"{' ' if icons else ''}Rewatching": _create_user_list_action(
             ctx, state, UserMediaListStatus.REPEATING
         ),
-        f"{'⏸️ ' if icons else ''}Paused": _create_user_list_action(
+        f"{' ' if icons else ''}Paused": _create_user_list_action(
             ctx, state, UserMediaListStatus.PAUSED
         ),
-        f"{'📑 ' if icons else ''}Planned": _create_user_list_action(
+        f"{' ' if icons else ''}Planned": _create_user_list_action(
             ctx, state, UserMediaListStatus.PLANNING
         ),
-        f"{'🔎 ' if icons else ''}Search": _create_search_media_list(ctx, state),
+        f"{' ' if icons else ''}Search": _create_search_media_list(ctx, state),
         f"{' ' if icons else ''}Search Manga": _create_search_manga_list(ctx, state),
-        f"{'🔍 ' if icons else ''}Dynamic Search": _create_dynamic_search_action(
+        f"{' ' if icons else ''}Dynamic Search": _create_dynamic_search_action(
             ctx, state
         ),
-        f"{'🏠 ' if icons else ''}Downloads": _create_downloads_action(ctx, state),
-        f"{'🔔 ' if icons else ''}Recently Updated": _create_media_list_action(
+        f"{' ' if icons else ''}Downloads": _create_downloads_action(ctx, state),
+        f"{' ' if icons else ''}Recently Updated": _create_media_list_action(
             ctx, state, MediaSort.UPDATED_AT_DESC
         ),
-        f"{'✨ ' if icons else ''}Popular": _create_media_list_action(
+        f"{' ' if icons else ''}Popular": _create_media_list_action(
             ctx, state, MediaSort.POPULARITY_DESC
         ),
-        f"{'💯 ' if icons else ''}Top Scored": _create_media_list_action(
+        f"{' ' if icons else ''}Top Scored": _create_media_list_action(
             ctx, state, MediaSort.SCORE_DESC
         ),
-        f"{'💖 ' if icons else ''}Favourites": _create_media_list_action(
+        f"{' ' if icons else ''}Favourites": _create_media_list_action(
             ctx, state, MediaSort.FAVOURITES_DESC
         ),
-        f"{'🎲 ' if icons else ''}Random": _create_random_media_list(ctx, state),
-        f"{'🎬 ' if icons else ''}Upcoming": _create_media_list_action(
+        f"{' ' if icons else ''}Random": _create_random_media_list(ctx, state),
+        f"{' ' if icons else ''}Upcoming": _create_media_list_action(
             ctx, state, MediaSort.POPULARITY_DESC, MediaStatus.NOT_YET_RELEASED
         ),
-        f"{'✅ ' if icons else ''}Completed": _create_user_list_action(
+        f"{' ' if icons else ''}Completed": _create_user_list_action(
             ctx, state, UserMediaListStatus.COMPLETED
         ),
-        f"{'🚮 ' if icons else ''}Dropped": _create_user_list_action(
+        f"{' ' if icons else ''}Dropped": _create_user_list_action(
             ctx, state, UserMediaListStatus.DROPPED
         ),
-        f"{'📝 ' if icons else ''}Edit Config": lambda: InternalDirective.CONFIG_EDIT,
-        f"{'❌ ' if icons else ''}Exit": lambda: InternalDirective.EXIT,
+        f"{' ' if icons else ''}Edit Config": lambda: InternalDirective.CONFIG_EDIT,
+        f"{' ' if icons else ''}Exit": lambda: InternalDirective.EXIT,
     }
 
     # Filter out hidden categories from the menu
