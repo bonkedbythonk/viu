@@ -86,13 +86,14 @@ def provider_search(ctx: Context, state: State) -> State | InternalDirective:
         selected_provider_anime = provider_results_map[best_match_title]
     else:
         choices = list(provider_results_map.keys())
-        choices.append("Back")
+        back_text = f"{' ' if config.general.icons else ''}Back"
+        choices.append(back_text)
 
         chosen_title = selector.choose(
             prompt=f"Confirm match for '{media_title}'", choices=choices
         )
 
-        if not chosen_title or chosen_title == "Back":
+        if not chosen_title or "Back" in chosen_title:
             return InternalDirective.BACK
 
         if selector.confirm(

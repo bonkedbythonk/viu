@@ -234,7 +234,7 @@ class AniListApi(BaseApiClient):
     def get_characters_of(
         self, params: MediaCharactersParams
     ) -> Optional[CharacterSearchResult]:
-        variables = {"id": params.id, "type": "ANIME"}
+        variables = {"id": params.id, "type": params.type.value if params.type else None}
         response = execute_graphql(
             ANILIST_ENDPOINT, self.http_client, gql.GET_MEDIA_CHARACTERS, variables
         )

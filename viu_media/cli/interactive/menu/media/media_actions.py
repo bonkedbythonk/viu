@@ -161,8 +161,13 @@ def _read_chapters(ctx: Context, state: State) -> MenuAction:
             return InternalDirective.RELOAD
             
         result_map = {result["title"]: result for result in search_results}
-        selected_title = ctx.selector.choose("Select Provider Match", list(result_map.keys()))
-        if not selected_title:
+        
+        provider_choices = list(result_map.keys())
+        back_text = f"{' ' if ctx.config.general.icons else ''}Back"
+        provider_choices.append(back_text)
+
+        selected_title = ctx.selector.choose("Select Provider Match", provider_choices)
+        if not selected_title or "Back" in selected_title:
             return InternalDirective.RELOAD
             
         selected_manga = result_map[selected_title]
@@ -180,10 +185,14 @@ def _read_chapters(ctx: Context, state: State) -> MenuAction:
         chapter_map = {ch["title"]: ch for ch in chapters}
         
         while True:
+            chapter_choices = list(chapter_map.keys())
+            back_text = f"{' ' if ctx.config.general.icons else ''}Back"
+            chapter_choices.append(back_text)
+
             selected_chapter_title = ctx.selector.choose(
-                "Select Chapter", list(chapter_map.keys())
+                "Select Chapter", chapter_choices
             )
-            if not selected_chapter_title:
+            if not selected_chapter_title or "Back" in selected_chapter_title:
                 break
                 
             selected_chapter = chapter_map[selected_chapter_title]

@@ -35,7 +35,8 @@ def episodes(ctx: Context, state: State) -> State | InternalDirective:
         chosen_episode, start_time = ctx.watch_history.get_episode(media_item)
 
     if not chosen_episode or ctx.switch.show_episodes_menu:
-        choices = [*available_episodes, "Back"]
+        back_text = f"{' ' if ctx.config.general.icons else ''}Back"
+        choices = [*available_episodes, back_text]
 
         preview_command = None
         if ctx.config.general.preview != "none":
@@ -50,7 +51,7 @@ def episodes(ctx: Context, state: State) -> State | InternalDirective:
                     prompt="Select Episode", choices=choices, preview=preview_command
                 )
 
-                if not chosen_episode_str or chosen_episode_str == "Back":
+                if not chosen_episode_str or "Back" in chosen_episode_str:
                     # TODO: should improve the back logic for menus that can be pass through
                     return InternalDirective.BACKX2
 
@@ -62,7 +63,7 @@ def episodes(ctx: Context, state: State) -> State | InternalDirective:
                 prompt="Select Episode", choices=choices, preview=None
             )
 
-            if not chosen_episode_str or chosen_episode_str == "Back":
+            if not chosen_episode_str or "Back" in chosen_episode_str:
                 # TODO: should improve the back logic for menus that can be pass through
                 return InternalDirective.BACKX2
 

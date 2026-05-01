@@ -31,7 +31,7 @@ def media_characters(ctx: Context, state: State) -> Union[State, InternalDirecti
 
     with feedback.progress(loading_message):
         characters_result = ctx.media_api.get_characters_of(
-            MediaCharactersParams(id=media_item.id)
+            MediaCharactersParams(id=media_item.id, type=media_item.type)
         )
 
     if not characters_result or not characters_result.characters:

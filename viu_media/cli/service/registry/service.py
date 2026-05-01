@@ -219,16 +219,23 @@ class MediaRegistryService:
         index = self._load_index()
 
         sorted_entries = sorted(
-            index.media_index.values(), key=lambda x: x.last_watched, reverse=True
+            index.media_index.values(), key=lambda x: getattr(x, "last_watched", datetime.min) or datetime.min, reverse=True
         )
 
         recent_media: List[MediaItem] = []
         for entry in sorted_entries:
-            record = self.get_media_record(entry.media_id)
-            if record:
-                recent_media.append(record.media_item)
+            try:
+                record = self.get_media_record(entry.media_id)
+                if record:
+                    recent_media.append(record.media_item)
+            except Exception as e:
+                logger.warning(f"Failed to load media record {entry.media_id}: {e}")
+                
+        if limit:
+            recent_media = recent_media[:limit]
+
         page_info = PageInfo(
-            total=len(sorted_entries),
+            total=len(recent_media),
         )
         return MediaSearchResult(page_info=page_info, media=recent_media)
 

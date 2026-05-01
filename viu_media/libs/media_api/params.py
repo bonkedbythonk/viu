@@ -93,6 +93,7 @@ class MediaRecommendationParams:
 @dataclass(frozen=True)
 class MediaCharactersParams:
     id: int
+    type: Optional[MediaType] = None
 
 
 @dataclass(frozen=True)
