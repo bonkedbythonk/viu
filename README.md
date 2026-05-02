@@ -3,7 +3,7 @@ Keeping up with constantly changing APIs requires more time than I currently hav
 </b>
 
 <p align="center">
-  <h1 align="center">Viu</h1>
+  <h1 align="center">Anicat</h1>
 </p>
 <p align="center">
   <sup>
@@ -12,12 +12,12 @@ Keeping up with constantly changing APIs requires more time than I currently hav
 </p>
 <div align="center">
 
-[![PyPI - Version](https://img.shields.io/pypi/v/viu-media)](https://pypi.org/project/viu-media/)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/viu-media)](https://pypi.org/project/viu-media/)
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/viu-media/Viu/test.yml?label=Tests)](https://github.com/viu-media/Viu/actions)
+[![PyPI - Version](https://img.shields.io/pypi/v/anicat-media)](https://pypi.org/project/anicat-media/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/anicat-media)](https://pypi.org/project/anicat-media/)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/anicat-media/Anicat/test.yml?label=Tests)](https://github.com/anicat-media/Anicat/actions)
 [![Discord](https://img.shields.io/discord/1250887070906323096?label=Discord&logo=discord)](https://discord.gg/HBEmAwvbHV)
-[![GitHub Issues](https://img.shields.io/github/issues/viu-media/Viu)](https://github.com/viu-media/Viu/issues)
-[![PyPI - License](https://img.shields.io/pypi/l/viu)](https://github.com/viu-media/Viu/blob/master/LICENSE)
+[![GitHub Issues](https://img.shields.io/github/issues/anicat-media/Anicat)](https://github.com/anicat-media/Anicat/issues)
+[![PyPI - License](https://img.shields.io/pypi/l/anicat)](https://github.com/anicat-media/Anicat/blob/master/LICENSE)
 
 </div>
 
@@ -27,12 +27,12 @@ Keeping up with constantly changing APIs requires more time than I currently hav
   </a>
 </p>
 
-[viu-showcase.webm](https://github.com/user-attachments/assets/5da0ec87-7780-4310-9ca2-33fae7cadd5f)
+[anicat-showcase.webm](https://github.com/user-attachments/assets/5da0ec87-7780-4310-9ca2-33fae7cadd5f)
 
 <details>
 <summary>Rofi</summary>
   
-  [viu-showcase-rofi.webm](https://github.com/user-attachments/assets/01f197d9-5ac9-45e6-a00b-8e8cd5ab459c)
+  [anicat-showcase-rofi.webm](https://github.com/user-attachments/assets/01f197d9-5ac9-45e6-a00b-8e8cd5ab459c)
 
 </details>
 
@@ -70,7 +70,7 @@ Keeping up with constantly changing APIs requires more time than I currently hav
 
 ## Installation
 
-Viu runs on Windows, macOS, Linux, and Android (via Termux). Pre-built binaries are available for quick installation without Python, or you can install via Python 3.10+ package managers.
+Anicat runs on Windows, macOS, Linux, and Android (via Termux). Pre-built binaries are available for quick installation without Python, or you can install via Python 3.10+ package managers.
 
 ### Prerequisites
 
@@ -87,50 +87,50 @@ For the best experience, please install these external tools:
 
 ### Pre-built Binaries (Recommended for Quick Start)
 
-The easiest way to get started is to download a pre-built, self-contained binary from the [**releases page**](https://github.com/viu-media/viu/releases/latest). These binaries include all dependencies and **do not require Python** to be installed.
+The easiest way to get started is to download a pre-built, self-contained binary from the [**releases page**](https://github.com/anicat-media/anicat/releases/latest). These binaries include all dependencies and **do not require Python** to be installed.
 
 **Available for:**
-*   **Linux** (x86_64): `viu-linux-x86_64`
-*   **Windows** (x86_64): `viu-windows-x86_64.exe`
-*   **macOS** (Intel x86_64): `viu-macos-x86_64`
-*   **macOS** (Apple Silicon ARM64): `viu-macos-arm64`
+*   **Linux** (x86_64): `anicat-linux-x86_64`
+*   **Windows** (x86_64): `anicat-windows-x86_64.exe`
+*   **macOS** (Intel x86_64): `anicat-macos-x86_64`
+*   **macOS** (Apple Silicon ARM64): `anicat-macos-arm64`
 
 **Installation Steps:**
-1.  Download the appropriate binary for your platform from the [**releases page**](https://github.com/viu-media/viu/releases/latest).
+1.  Download the appropriate binary for your platform from the [**releases page**](https://github.com/anicat-media/anicat/releases/latest).
 2.  **Linux/macOS:** Make it executable:
     ```bash
     # Replace with the actual binary name you downloaded
-    chmod +x viu-linux-x86_64
+    chmod +x anicat-linux-x86_64
     ```
     Then move it to a directory in your PATH:
     ```bash
     # Option 1: System-wide installation (requires sudo)
-    sudo mv viu-linux-x86_64 /usr/local/bin/viu
+    sudo mv anicat-linux-x86_64 /usr/local/bin/anicat
     
     # Option 2: User directory installation
     mkdir -p ~/.local/bin
-    mv viu-linux-x86_64 ~/.local/bin/viu
+    mv anicat-linux-x86_64 ~/.local/bin/anicat
     # Make sure ~/.local/bin is in your PATH
     ```
-    **Windows:** Simply rename `viu-windows-x86_64.exe` to `viu.exe` and place it in a directory in your PATH, or run it directly.
+    **Windows:** Simply rename `anicat-windows-x86_64.exe` to `anicat.exe` and place it in a directory in your PATH, or run it directly.
 3.  Verify the installation:
     ```bash
-    viu --version
+    anicat --version
     ```
 
 ### Recommended Installation (uv)
 
-The best way to install Viu is with [**uv**](https://github.com/astral-sh/uv), a lightning-fast Python package manager.
+The best way to install Anicat is with [**uv**](https://github.com/astral-sh/uv), a lightning-fast Python package manager.
 
 ```bash
 # Install with all optional features for the full experience
-uv tool install "viu-media[standard]"
+uv tool install "anicat-media[standard]"
 
 # Or, pick and choose the extras you need:
-uv tool install viu-media  # Core functionality only
-uv tool install "viu-media[download]"  # For advanced downloading with yt-dlp
-uv tool install "viu-media[discord]"   # For Discord Rich Presence
-uv tool install "viu-media[notifications]" # For desktop notifications
+uv tool install anicat-media  # Core functionality only
+uv tool install "anicat-media[download]"  # For advanced downloading with yt-dlp
+uv tool install "anicat-media[discord]"   # For Discord Rich Presence
+uv tool install "anicat-media[notifications]" # For desktop notifications
 ```
 
 ### Other Installation Methods
@@ -141,30 +141,30 @@ uv tool install "viu-media[notifications]" # For desktop notifications
   #### Nix / NixOS
   ##### Ephemeral / One-Off Run (No Installation)
   ```bash
-  nix run github:viu-media/viu
+  nix run github:anicat-media/anicat
   ```
   ##### Imperative Installation
   ```bash
-  nix profile install github:viu-media/viu
+  nix profile install github:anicat-media/anicat
   ```
   ##### Declarative Installation
   ###### in your flake.nix
   ```nix
-  viu.url = "github:viu-media/viu";
+  anicat.url = "github:anicat-media/anicat";
   ```
   ###### in your system or home-manager packages
   ```nix
-  inputs.viu.packages.${pkgs.system}.default
+  inputs.anicat.packages.${pkgs.system}.default
   ```
 
   #### Arch Linux (AUR)
   Use an AUR helper like `yay` or `paru`.
   ```bash
   # Stable version (recommended)
-  yay -S viu-media
+  yay -S anicat-media
 
   # Git version (latest commit)
-  yay -S viu-media-git
+  yay -S anicat-media-git
   ```
   #### Termux
   You may have to have rust installed see this issue: https://github.com/pydantic/pydantic-core/issues/1012#issuecomment-2511269688.
@@ -182,8 +182,8 @@ pip install pydantic --extra-index-url https://termux-user-repository.github.io/
 # the above will take a while if you want to see more output and feel like sth is happening lol
 pip install pydantic --extra-index-url https://termux-user-repository.github.io/pypi/ -v
 
-# now you can install viu
-pip install viu-media
+# now you can install anicat
+pip install anicat-media
 
 # === optional deps ===
 # if you have reach here awesome lol :)
@@ -214,11 +214,11 @@ pkg install libxml2 libxslt
 pkg install fzf
 
 # then enable fzf in the config
-viu --selector fzf config --update
+anicat --selector fzf config --update
 
 # if you want previews as well specify preview option
 # though images arent that pretty lol, so you can stick to text over full
-viu --preview text config --update
+anicat --preview text config --update
 
 # if you set preview to full you need a terminal image renderer
 pkg install chafa
@@ -243,12 +243,12 @@ https://github.com/user-attachments/assets/0c628421-a439-4dea-91bb-7153e8f20ccf
 
   #### Using pipx (for isolated environments)
   ```bash
-  pipx install "viu-media[standard]"
+  pipx install "anicat-media[standard]"
   ```
   
   #### Using pip
   ```bash
-  pip install "viu-media[standard]"
+  pip install "anicat-media[standard]"
   ```
 </details>
 
@@ -257,15 +257,15 @@ https://github.com/user-attachments/assets/0c628421-a439-4dea-91bb-7153e8f20ccf
   
   Requires [Git](https://git-scm.com/), [Python 3.10+](https://www.python.org/), and [uv](https://astral.sh/blog/uv).
   ```bash
-  git clone https://github.com/viu-media/Viu.git --depth 1
-  cd Viu
+  git clone https://github.com/anicat-media/Anicat.git --depth 1
+  cd Anicat
   uv tool install .
-  viu --version
+  anicat --version
   ```
 </details>
 
 > [!TIP]
-> Enable shell completions for a much better experience by running `viu completions` and following the on-screen instructions for your shell.
+> Enable shell completions for a much better experience by running `anicat completions` and following the on-screen instructions for your shell.
 
 ## Getting Started: Quick Start
 
@@ -273,59 +273,59 @@ Get up and running in three simple steps:
 
 1.  **Authenticate with AniList:**
     ```bash
-    viu anilist auth
+    anicat anilist auth
     ```
     This will open your browser. Authorize the app and paste the obtained token back into the terminal. Alternatively, you can pass the token directly as an argument, or provide a path to a text file containing the token.
 
 2.  **Launch the Interactive TUI:**
     ```bash
-    viu anilist
+    anicat anilist
     ```
 
 3.  **Browse & Play:** Use your arrow keys to navigate the menus, select an anime, and choose an episode to stream instantly.
 
 ## Usage Guide
 
-### The Interactive TUI (`viu anilist`)
+### The Interactive TUI (`anicat anilist`)
 
-This is the main, user-friendly way to use Viu. It provides a rich terminal experience where you can:
+This is the main, user-friendly way to use Anicat. It provides a rich terminal experience where you can:
 *   Browse trending, popular, and seasonal anime.
 *   Manage your personal lists (Watching, Completed, Paused, etc.).
 *   Search for any anime in the AniList database.
 *   View detailed information, characters, recommendations, reviews, and airing schedules.
 *   Stream or download episodes directly from the menus.
 
-### Powerful Searching (`viu anilist search`)
+### Powerful Searching (`anicat anilist search`)
 
 Filter the entire AniList database with powerful command-line flags.
 
 ```bash
 # Search for anime from 2024, sorted by popularity, that is releasing and not on your list
-viu anilist search -y 2024 -s POPULARITY_DESC --status RELEASING --not-on-list
+anicat anilist search -y 2024 -s POPULARITY_DESC --status RELEASING --not-on-list
 
 # Find the most popular movies with the "Fantasy" genre
-viu anilist search -g Fantasy -f MOVIE -s POPULARITY_DESC
+anicat anilist search -g Fantasy -f MOVIE -s POPULARITY_DESC
 
 # Dump search results as JSON instead of launching the TUI
-viu anilist search -t "Demon Slayer" --dump-json
+anicat anilist search -t "Demon Slayer" --dump-json
 ```
 
-### Background Downloads (`viu queue` & `worker`)
+### Background Downloads (`anicat queue` & `worker`)
 
-Viu includes a robust background downloading system.
+Anicat includes a robust background downloading system.
 
 1.  **Add episodes to the queue:**
     ```bash
     # Add episodes 1-12 of Jujutsu Kaisen to the download queue
-    viu queue add -t "Jujutsu Kaisen" -r "0:12"
+    anicat queue add -t "Jujutsu Kaisen" -r "0:12"
     ```
 2.  **Start the worker process:**
     ```bash
     # Run the worker in the foreground (press Ctrl+C to stop)
-    viu worker
+    anicat worker
 
     # Or run it as a background process
-    viu worker &
+    anicat worker &
     ```The worker will now process the queue, download your episodes, and check for notifications.
 
 ### Scriptable Commands (`download` & `search`)
@@ -335,24 +335,24 @@ These commands are designed for automation and quick, non-interactive tasks.
 #### `download` Examples
 ```bash
 # Download the latest 5 episodes of One Piece
-viu download -t "One Piece" -r "-5"
+anicat download -t "One Piece" -r "-5"
 
 # Download episodes 1 to 24, merge subtitles, and clean up original files
-viu download -t "Jujutsu Kaisen" -r "0:24" --merge --clean
+anicat download -t "Jujutsu Kaisen" -r "0:24" --merge --clean
 ```
 
 #### `search` (Binging) Examples
 ```bash
 # Start binging an anime from the first episode
-viu search -t "Attack on Titan" -r ":"
+anicat search -t "Attack on Titan" -r ":"
 
 # Watch the latest episode directly
-viu search -t "My Hero Academia" -r "-1"
+anicat search -t "My Hero Academia" -r "-1"
 ```
 
-### Local Data Management (`viu registry`)
+### Local Data Management (`anicat registry`)
 
-Viu maintains a local database of your anime for offline access and enhanced performance.
+Anicat maintains a local database of your anime for offline access and enhanced performance.
 
 *   `registry sync`: Synchronize your local data with your remote AniList account.
 *   `registry stats`: Show detailed statistics about your viewing habits.
@@ -363,13 +363,13 @@ Viu maintains a local database of your anime for offline access and enhanced per
 
 ## Configuration
 
-Viu is highly customizable. A default configuration file with detailed comments is created on the first run.
+Anicat is highly customizable. A default configuration file with detailed comments is created on the first run.
 
-*   **Find your config file:** `viu config --path`
-*   **Edit in your default editor:** `viu config`
-*   **Use the interactive wizard:** `viu config --interactive`
+*   **Find your config file:** `anicat config --path`
+*   **Edit in your default editor:** `anicat config`
+*   **Use the interactive wizard:** `anicat config --interactive`
 
-Most settings in the config file can be temporarily overridden with command-line flags (e.g., `viu --provider animepahe anilist`).
+Most settings in the config file can be temporarily overridden with command-line flags (e.g., `anicat --provider animepahe anilist`).
 
 <details>
   <summary><b>Default Configuration (`config.ini`) Explained</b></summary>
@@ -417,7 +417,7 @@ download_check_interval = 5      ; How often to process the download queue (minu
 
 ### MPV IPC Integration
 
-When `use_ipc = True` is set in your config, Viu provides powerful in-player controls without needing to close MPV.
+When `use_ipc = True` is set in your config, Anicat provides powerful in-player controls without needing to close MPV.
 
 **Key Bindings:**
 *   `Shift+N`: Play the next episode.
@@ -434,31 +434,31 @@ When `use_ipc = True` is set in your config, Viu provides powerful in-player con
 
 You can run the background worker as a systemd service for persistence.
 
-1.  Create a service file at `~/.config/systemd/user/viu-worker.service`:
+1.  Create a service file at `~/.config/systemd/user/anicat-worker.service`:
     ```ini
     [Unit]
-    Description=Viu Background Worker
+    Description=Anicat Background Worker
     After=network-online.target
 
     [Service]
     Type=simple
-    ExecStart=/path/to/your/viu worker --log
+    ExecStart=/path/to/your/anicat worker --log
     Restart=always
     RestartSec=30
 
     [Install]
     WantedBy=default.target
     ```
-    *Replace `/path/to/your/viu` with the output of `which viu`.*
+    *Replace `/path/to/your/anicat` with the output of `which anicat`.*
 
 2.  Enable and start the service:
     ```bash
     systemctl --user daemon-reload
-    systemctl --user enable --now viu-worker.service
+    systemctl --user enable --now anicat-worker.service
     ```
     
 ## Project using it
-**[Inazuma](https://github.com/viu-media/Inazuma)** - official gui wrapper over viu built in kivymd
+**[Inazuma](https://github.com/anicat-media/Inazuma)** - official gui wrapper over anicat built in kivymd
 
 ## Contributing
 

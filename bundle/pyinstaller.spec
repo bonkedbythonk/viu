@@ -10,34 +10,34 @@ is_macos = sys.platform == 'darwin'
 
 # Collect all required data files
 datas = [
-    ('../viu_media/assets', 'viu_media/assets'),
+    ('../anicat_media/assets', 'anicat_media/assets'),
 ]
 
 # Collect all required hidden imports
-# Include viu_media and all its submodules to ensure menu modules are bundled
+# Include anicat_media and all its submodules to ensure menu modules are bundled
 hiddenimports = [
     'click',
     'rich',
     'yt_dlp',
-    'viu_media',
-    'viu_media.cli.interactive.menu',
-    'viu_media.cli.interactive.menu.media',
+    'anicat_media',
+    'anicat_media.cli.interactive.menu',
+    'anicat_media.cli.interactive.menu.media',
     # Explicit menu modules (PyInstaller doesn't always pick these up)
-    'viu_media.cli.interactive.menu.media.downloads',
-    'viu_media.cli.interactive.menu.media.download_episodes',
-    'viu_media.cli.interactive.menu.media.dynamic_search',
-    'viu_media.cli.interactive.menu.media.episodes',
-    'viu_media.cli.interactive.menu.media.main',
-    'viu_media.cli.interactive.menu.media.media_actions',
-    'viu_media.cli.interactive.menu.media.media_airing_schedule',
-    'viu_media.cli.interactive.menu.media.media_characters',
-    'viu_media.cli.interactive.menu.media.media_review',
-    'viu_media.cli.interactive.menu.media.player_controls',
-    'viu_media.cli.interactive.menu.media.play_downloads',
-    'viu_media.cli.interactive.menu.media.provider_search',
-    'viu_media.cli.interactive.menu.media.results',
-    'viu_media.cli.interactive.menu.media.servers',
-] + collect_submodules('viu_media')
+    'anicat_media.cli.interactive.menu.media.downloads',
+    'anicat_media.cli.interactive.menu.media.download_episodes',
+    'anicat_media.cli.interactive.menu.media.dynamic_search',
+    'anicat_media.cli.interactive.menu.media.episodes',
+    'anicat_media.cli.interactive.menu.media.main',
+    'anicat_media.cli.interactive.menu.media.media_actions',
+    'anicat_media.cli.interactive.menu.media.media_airing_schedule',
+    'anicat_media.cli.interactive.menu.media.media_characters',
+    'anicat_media.cli.interactive.menu.media.media_review',
+    'anicat_media.cli.interactive.menu.media.player_controls',
+    'anicat_media.cli.interactive.menu.media.play_downloads',
+    'anicat_media.cli.interactive.menu.media.provider_search',
+    'anicat_media.cli.interactive.menu.media.results',
+    'anicat_media.cli.interactive.menu.media.servers',
+] + collect_submodules('anicat_media')
 
 
 # Exclude OpenSSL libraries on Linux to avoid version conflicts
@@ -48,7 +48,7 @@ if sys.platform == 'linux':
     binaries = [b for b in binaries if not any(lib in b[0] for lib in ['libssl', 'libcrypto'])]
 
 a = Analysis(
-    ['../viu_media/viu.py'],
+    ['../anicat_media/anicat.py'],
     pathex=[],
     binaries=binaries,
     datas=datas,
@@ -70,7 +70,7 @@ pyz = PYZ(
 )
 
 # Icon path - only use .ico on Windows
-icon_path = '../viu_media/assets/icons/logo.ico' if is_windows else None
+icon_path = '../anicat_media/assets/icons/logo.ico' if is_windows else None
 
 exe = EXE(
     pyz,
@@ -79,7 +79,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='viu',
+    name='anicat',
     debug=False,
     bootloader_ignore_signals=False,
     strip=not is_windows,  # strip doesn't work well on Windows without proper tools

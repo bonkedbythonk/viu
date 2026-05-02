@@ -1,0 +1,16 @@
+# values in {NAME} syntax are provided by python using .replace()
+# 
+[Unit]
+Description=Anicat Background Worker
+After=network-online.target
+
+[Service]
+Type=simple
+# Ensure you have the full path to your anicat executable
+# Use `which anicat` to find it
+ExecStart={EXECUTABLE} worker --log
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=default.target

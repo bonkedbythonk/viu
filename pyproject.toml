@@ -1,5 +1,5 @@
 [project]
-name = "viu-media"
+name = "anicat-media"
 version = "3.3.7"
 description = "A browser anime site experience from the terminal"
 license = "UNLICENSE"
@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.scripts]
-viu = 'viu_media:Cli'
+anicat = 'anicat_media.cli.main:main'
 
 [project.optional-dependencies]
 standard = [

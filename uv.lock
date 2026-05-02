@@ -4009,7 +4009,7 @@ wheels = [
 ]
 
 [[package]]
-name = "viu-media"
+name = "anicat-media"
 version = "3.3.7"
 source = { editable = "." }
 dependencies = [

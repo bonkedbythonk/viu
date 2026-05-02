@@ -2,11 +2,11 @@
 CLI_DIR="$(dirname "$(realpath "$0")")"
 VERSION=$1
 [ -z "$VERSION" ] && echo no version provided && exit 1
-[ "$VERSION" = "current" ] && viu --version && exit 0
+[ "$VERSION" = "current" ] && anicat --version && exit 0
 sed -i "s/^version.*/version = \"$VERSION\"/" "$CLI_DIR/pyproject.toml" &&
-  sed -i "s/__version__.*/__version__ = \"v$VERSION\"/" "$CLI_DIR/viu/__init__.py" &&
+  sed -i "s/__version__.*/__version__ = \"v$VERSION\"/" "$CLI_DIR/anicat/__init__.py" &&
   sed -i "s/version = .*/version = \"$VERSION\";/" "$CLI_DIR/flake.nix" &&
-  git stage "$CLI_DIR/pyproject.toml" "$CLI_DIR/viu/__init__.py" "$CLI_DIR/flake.nix" &&
+  git stage "$CLI_DIR/pyproject.toml" "$CLI_DIR/anicat/__init__.py" "$CLI_DIR/flake.nix" &&
   git commit -m "chore: bump version (v$VERSION)" &&
   # nix flake lock &&
   uv lock &&

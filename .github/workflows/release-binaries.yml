@@ -21,16 +21,16 @@ jobs:
         include:
           - os: ubuntu-22.04
             target: linux
-            asset_name: viu-linux-x86_64
-            executable: viu
+            asset_name: anicat-linux-x86_64
+            executable: anicat
           - os: windows-latest
             target: windows
-            asset_name: viu-windows-x86_64.exe
-            executable: viu.exe
+            asset_name: anicat-windows-x86_64.exe
+            executable: anicat.exe
           - os: macos-latest
             target: macos
-            asset_name: viu-macos-x86_64
-            executable: viu
+            asset_name: anicat-macos-x86_64
+            executable: anicat
 
     runs-on: ${{ matrix.os }}
 
@@ -108,20 +108,20 @@ jobs:
         run: uv run pyinstaller bundle/pyinstaller.spec --distpath dist --workpath build/pyinstaller --clean
 
       - name: Rename executable
-        run: mv dist/viu dist/viu-macos-arm64
+        run: mv dist/anicat dist/anicat-macos-arm64
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: viu-macos-arm64
-          path: dist/viu-macos-arm64
+          name: anicat-macos-arm64
+          path: dist/anicat-macos-arm64
           if-no-files-found: error
 
       - name: Upload to Release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/viu-macos-arm64
+          files: dist/anicat-macos-arm64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -1,8 +1,8 @@
 from typing import Any
 
-from viu_media.libs.media_api.anilist.mapper import to_generic_user_profile
-from viu_media.libs.media_api.anilist.types import AnilistViewerData
-from viu_media.libs.media_api.types import UserProfile
+from anicat_media.libs.media_api.anilist.mapper import to_generic_user_profile
+from anicat_media.libs.media_api.anilist.types import AnilistViewerData
+from anicat_media.libs.media_api.types import UserProfile
 
 
 def test_to_generic_user_profile_success():

@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from click.testing import CliRunner
 
-from viu_media.cli.commands.anilist.commands.auth import auth
+from anicat_media.cli.commands.anilist.commands.auth import auth
 
 
 @pytest.fixture
@@ -20,31 +20,31 @@ def mock_config():
 
 @pytest.fixture
 def mock_auth_service():
-    with patch("viu_media.cli.service.auth.AuthService") as mock:
+    with patch("anicat_media.cli.service.auth.AuthService") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_feedback_service():
-    with patch("viu_media.cli.service.feedback.FeedbackService") as mock:
+    with patch("anicat_media.cli.service.feedback.FeedbackService") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_selector():
-    with patch("viu_media.libs.selectors.selector.create_selector") as mock:
+    with patch("anicat_media.libs.selectors.selector.create_selector") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_api_client():
-    with patch("viu_media.libs.media_api.api.create_api_client") as mock:
+    with patch("anicat_media.libs.media_api.api.create_api_client") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_webbrowser():
-    with patch("viu_media.cli.commands.anilist.commands.auth.webbrowser") as mock:
+    with patch("anicat_media.cli.commands.anilist.commands.auth.webbrowser") as mock:
         yield mock
 
 
@@ -55,7 +55,7 @@ def test_auth_with_token_argument(
     mock_feedback_service,
     mock_api_client,
 ):
-    """Test 'viu anilist auth <token>' via positional argument."""
+    """Test 'anicat anilist auth <token>' via positional argument."""
     api_client_instance = mock_api_client.return_value
     profile_mock = MagicMock()
     profile_mock.name = "testuser"
@@ -84,7 +84,7 @@ def test_auth_with_token_flag(
     mock_feedback_service,
     mock_api_client,
 ):
-    """Test 'viu anilist auth --token <token>' via CLI flag."""
+    """Test 'anicat anilist auth --token <token>' via CLI flag."""
     api_client_instance = mock_api_client.return_value
     profile_mock = MagicMock()
     profile_mock.name = "testuser"
@@ -141,7 +141,7 @@ def test_auth_no_token_shows_instructions(
     mock_feedback_service,
     mock_webbrowser,
 ):
-    """Test 'viu anilist auth' with no token anywhere shows instructions, no interactive prompt."""
+    """Test 'anicat anilist auth' with no token anywhere shows instructions, no interactive prompt."""
     auth_service_instance = mock_auth_service.return_value
     auth_service_instance.resolve_token.return_value = None
 
@@ -160,7 +160,7 @@ def test_auth_no_token_shows_instructions(
 def test_auth_status_logged_in(
     runner, mock_config, mock_auth_service, mock_feedback_service
 ):
-    """Test 'viu anilist auth --status' when logged in."""
+    """Test 'anicat anilist auth --status' when logged in."""
     auth_service_instance = mock_auth_service.return_value
     user_data_mock = MagicMock()
     user_data_mock.user_profile = "testuser"
@@ -176,7 +176,7 @@ def test_auth_status_logged_in(
 def test_auth_status_logged_out(
     runner, mock_config, mock_auth_service, mock_feedback_service
 ):
-    """Test 'viu anilist auth --status' when logged out."""
+    """Test 'anicat anilist auth --status' when logged out."""
     auth_service_instance = mock_auth_service.return_value
     auth_service_instance.get_auth.return_value = None
 
@@ -190,7 +190,7 @@ def test_auth_status_logged_out(
 def test_auth_logout(
     runner, mock_config, mock_auth_service, mock_feedback_service, mock_selector
 ):
-    """Test 'viu anilist auth --logout'."""
+    """Test 'anicat anilist auth --logout'."""
     selector_instance = mock_selector.return_value
     selector_instance.confirm.return_value = True
 
@@ -206,7 +206,7 @@ def test_auth_logout(
 def test_auth_logout_cancel(
     runner, mock_config, mock_auth_service, mock_feedback_service, mock_selector
 ):
-    """Test 'viu anilist auth --logout' when user cancels."""
+    """Test 'anicat anilist auth --logout' when user cancels."""
     selector_instance = mock_selector.return_value
     selector_instance.confirm.return_value = False
 
@@ -225,7 +225,7 @@ def test_auth_already_logged_in_relogin_yes(
     mock_selector,
     mock_api_client,
 ):
-    """Test 'viu anilist auth --token <token>' when already logged in and user chooses to re-authenticate."""
+    """Test 'anicat anilist auth --token <token>' when already logged in and user chooses to re-authenticate."""
     auth_service_instance = mock_auth_service.return_value
     auth_profile_mock = MagicMock()
     auth_profile_mock.user_profile.name = "testuser"
@@ -255,7 +255,7 @@ def test_auth_already_logged_in_relogin_no(
     mock_feedback_service,
     mock_selector,
 ):
-    """Test 'viu anilist auth --token <token>' when already logged in and user declines re-auth."""
+    """Test 'anicat anilist auth --token <token>' when already logged in and user declines re-auth."""
     auth_service_instance = mock_auth_service.return_value
     auth_profile_mock = MagicMock()
     auth_profile_mock.user_profile.name = "testuser"

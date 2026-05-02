@@ -4,11 +4,11 @@ from collections import defaultdict
 from pathlib import Path
 
 import httpx
-from viu_media.core.utils.graphql import execute_graphql
+from anicat_media.core.utils.graphql import execute_graphql
 
 DEV_DIR = Path(__file__).resolve().parent
 media_tags_type_py = (
-    DEV_DIR.parent / "viu_media" / "libs" / "media_api" / "_media_tags.py"
+    DEV_DIR.parent / "anicat_media" / "libs" / "media_api" / "_media_tags.py"
 )
 media_tags_gql = DEV_DIR / "graphql" / "anilist" / "media_tags.gql"
 generated_tags_json = DEV_DIR / "generated" / "anilist" / "tags.json"

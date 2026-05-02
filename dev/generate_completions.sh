@@ -5,10 +5,10 @@ APP_DIR="$(
 )"
 
 # fish shell completions
-_VIU_COMPLETE=fish_source viu >"$APP_DIR/completions/viu.fish"
+_ANICAT_COMPLETE=fish_source anicat >"$APP_DIR/completions/anicat.fish"
 
 # zsh completions
-_VIU_COMPLETE=zsh_source viu >"$APP_DIR/completions/viu.zsh"
+_ANICAT_COMPLETE=zsh_source anicat >"$APP_DIR/completions/anicat.zsh"
 
 # bash completions
-_VIU_COMPLETE=bash_source viu >"$APP_DIR/completions/viu.bash"
+_ANICAT_COMPLETE=bash_source anicat >"$APP_DIR/completions/anicat.bash"

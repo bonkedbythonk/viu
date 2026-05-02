@@ -1,5 +1,5 @@
 {
-  description = "Viu Project Flake";
+  description = "Anicat Project Flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -22,7 +22,7 @@
       in
       {
         packages.default = python312Packages.buildPythonApplication {
-          pname = "viu";
+          pname = "anicat";
           inherit version;
           pyproject = true;
 
@@ -68,9 +68,9 @@
 
           meta = {
             description = "Your browser anime experience from the terminal";
-            homepage = "https://github.com/viu-media/Viu";
-            changelog = "https://github.com/viu-media/Viu/releases/tag/v${version}";
-            mainProgram = "viu";
+            homepage = "https://github.com/anicat-media/Anicat";
+            changelog = "https://github.com/anicat-media/Anicat/releases/tag/v${version}";
+            mainProgram = "anicat";
             license = lib.licenses.unlicense;
             maintainers = with lib.maintainers; [ theobori ];
           };
