@@ -53,37 +53,44 @@ CONFIG_FOOTER = f"""
 
 
 def generate_config_toml_from_app_model(app_model: AppConfig) -> str:
-    """Generate a clean, minimal TOML configuration file content."""
-
+    """Generate a clean, minimal TOML configuration file content as per user request."""
+    
+    downloads_dir = str(app_model.downloads.downloads_dir).replace('\\', '\\\\')
+    
     minimal_toml = f"""{CONFIG_HEADER}
 
 [general]
-welcome_screen = true
-icons = true
-api_client = "anilist"
 provider = "allanime"
+selector = "fzf"
+image_renderer = "icat"
 manga_viewer = "icat"
+hidden_categories = []
+icons = true
 
 [stream]
 player = "iina"
 quality = "1080"
 translation_type = "sub"
-server = "TOP"
 auto_next = false
-continue_from_watch_history = true
-
-[downloads]
-downloader = "auto"
-enable_tracking = true
-max_concurrent = 3
+use_ipc = true
 
 [anilist]
-# Add your AniList token below to enable tracking and sync features
-# token = "YOUR_TOKEN_HERE"
 preferred_language = "english"
+per_page = 15
+
+[downloads]
+downloads_dir = "{downloads_dir}"
 
 [fzf]
-header_color = "95,135,175"
+header_ascii_art = \"\"\"
+ ▄▄   ▄▄ ▄▄▄ ▄▄   ▄▄ 
+ █ █ █ █  █  █ █ █ █ 
+ █ █▄█ █  █  █ █ █ █ 
+ █  ▄  █  █  █ █ █ █ 
+ █ █ █ █  █  █ █▄█ █ 
+ ▀▀   ▀▀ ▀▀▀  ▀▀▀▀▀  
+\"\"\"
+opts = "--layout=reverse --border=rounded --info=inline --ansi"
 
 {CONFIG_FOOTER}"""
     return minimal_toml

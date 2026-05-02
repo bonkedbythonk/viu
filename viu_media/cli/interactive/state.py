@@ -65,32 +65,26 @@ class MediaApiState(StateModel):
     media_id_: Optional[int] = Field(default=None, alias="media_id")
 
     @property
-    def search_result(self) -> dict[int, MediaItem]:
-        if self.search_result_ is None:
-            raise RuntimeError("Malformed state, please report")
+    def search_result(self) -> Optional[dict[int, MediaItem]]:
         return self.search_result_
 
     @property
-    def search_params(self) -> Union[MediaSearchParams, UserMediaListSearchParams]:
-        if self.search_params_ is None:
-            raise RuntimeError("Malformed state, please report")
+    def search_params(self) -> Optional[Union[MediaSearchParams, UserMediaListSearchParams]]:
         return self.search_params_
 
     @property
-    def page_info(self) -> PageInfo | None:
-        # if not self._page_info:
-        #     raise RuntimeError("Malformed state, please report")
+    def page_info(self) -> Optional[PageInfo]:
         return self.page_info_
 
     @property
-    def media_id(self) -> int:
-        if self.media_id_ is None:
-            raise RuntimeError("Malformed state, please report")
+    def media_id(self) -> Optional[int]:
         return self.media_id_
 
     @property
-    def media_item(self) -> MediaItem:
-        return self.search_result[self.media_id]
+    def media_item(self) -> Optional[MediaItem]:
+        if self.search_result and self.media_id:
+            return self.search_result.get(self.media_id)
+        return None
 
 
 class ProviderState(StateModel):
@@ -104,44 +98,34 @@ class ProviderState(StateModel):
     start_time_: Optional[str] = Field(default=None, alias="start_time")
 
     @property
-    def search_results(self) -> SearchResults:
-        if self.search_results_ is None:
-            raise RuntimeError("Malformed state, please report")
+    def search_results(self) -> Optional[SearchResults]:
         return self.search_results_
 
     @property
-    def anime(self) -> Anime:
-        if self.anime_ is None:
-            raise RuntimeError("Malformed state, please report")
+    def anime(self) -> Optional[Anime]:
         return self.anime_
 
     @property
-    def episode(self) -> str | None:
-        # if not self._episode:
-        #     raise RuntimeError("Malformed state, please report")
+    def episode(self) -> Optional[str]:
         return self.episode_
 
     @property
-    def servers(self) -> Dict[str, Server]:
-        if self.servers_ is None:
-            raise RuntimeError("Malformed state, please report")
+    def servers(self) -> Optional[Dict[str, Server]]:
         return self.servers_
 
     @property
-    def server_name(self) -> str:
-        if self.server_name_ is None:
-            raise RuntimeError("Malformed state, please report")
+    def server_name(self) -> Optional[str]:
         return self.server_name_
 
     @property
-    def start_time(self) -> str | None:
-        # if not self._start_time:
-        #     raise RuntimeError("Malformed state, please report")
+    def start_time(self) -> Optional[str]:
         return self.start_time_
 
     @property
-    def server(self) -> Server:
-        return self.servers[self.server_name]
+    def server(self) -> Optional[Server]:
+        if self.servers and self.server_name:
+            return self.servers.get(self.server_name)
+        return None
 
 
 class State(StateModel):

@@ -26,6 +26,8 @@ REGISTRY_VERSION = "1.0"
 
 class MediaEpisode(BaseModel):
     episode_number: str
+    chapter_number: Optional[str] = None
+    volume_number: Optional[str] = None
 
     download_status: DownloadStatus = DownloadStatus.NOT_DOWNLOADED
     file_path: Optional[Path] = None
@@ -56,6 +58,8 @@ class MediaRegistryIndexEntry(BaseModel):
     last_watched: datetime = Field(default_factory=datetime.now)
     total_duration: Optional[str] = None
     total_episodes: int = 0
+    chapter_number: Optional[str] = None
+    volume_number: Optional[str] = None
 
     score: float = 0
     repeat: int = 0

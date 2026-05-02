@@ -60,9 +60,16 @@ class MediaRegistryService:
         if not is_modified and self._index is not None:
             return self._index
         if self._index_file.exists():
-            with self._index_file.open("r", encoding="utf-8") as f:
-                data = json.load(f)
-            self._index = MediaRegistryIndex.model_validate(data)
+            try:
+                with self._index_file.open("r", encoding="utf-8") as f:
+                    data = json.load(f)
+                self._index = MediaRegistryIndex.model_validate(data)
+            except Exception as e:
+                logger.error(f"Malformed state in registry index: {e}. Attempting self-heal.")
+                import shutil
+                shutil.move(str(self._index_file), str(self._index_file) + ".old")
+                self._index = MediaRegistryIndex()
+                self._save_index(self._index)
         else:
             self._index = MediaRegistryIndex()
             self._save_index(self._index)
@@ -105,12 +112,15 @@ class MediaRegistryService:
         if not record_file.exists():
             return None
 
-        data = json.load(record_file.open(mode="r", encoding="utf-8"))
-
-        record = MediaRecord.model_validate(data)
-
-        # logger.debug(f"Loaded media record for {media_id}")
-        return record
+        try:
+            data = json.load(record_file.open(mode="r", encoding="utf-8"))
+            record = MediaRecord.model_validate(data)
+            return record
+        except Exception as e:
+            logger.warning(f"Malformed state in media record {media_id}: {e}. Skipping and renaming to .old.")
+            import shutil
+            shutil.move(str(record_file), str(record_file) + ".old")
+            return None
 
     def get_or_create_index_entry(self, media_id: int) -> MediaRegistryIndexEntry:
         index_entry = self.get_media_index_entry(media_id)
