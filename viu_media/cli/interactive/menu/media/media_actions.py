@@ -221,26 +221,15 @@ def _read_chapters(ctx: Context, state: State) -> MenuAction:
                 match = re.search(r"(\d+)", selected_chapter_title)
             
             if match:
-                chapter_number = int(match.group(1))
-                current_progress = 0
-                if media_item.user_status and media_item.user_status.progress:
-                    current_progress = media_item.user_status.progress
-                    
-                if chapter_number > current_progress:
-                    from .....libs.media_api.params import UpdateUserMediaListEntryParams
-                    from .....libs.media_api.types import UserMediaListStatus
-                    
-                    success = ctx.media_api.update_list_entry(
-                        UpdateUserMediaListEntryParams(
-                            media_id=media_item.id,
-                            progress=str(chapter_number),
-                            status=UserMediaListStatus.WATCHING,
-                        )
-                    )
-                    if success:
-                        feedback.info(
-                            f"[cyan]AniList:[/] Updated [bold]{manga_title}[/] progress to chapter {chapter_number}"
-                        )
+                chapter_number = str(int(match.group(1)))
+                from .....libs.player.types import PlayerResult
+                
+                result = PlayerResult(
+                    episode=chapter_number,
+                    stop_time=None,
+                    total_time=None
+                )
+                ctx.watch_history.track(media_item, result)
                     
             continue_reading = ctx.selector.choose("What next?", ["Select another chapter", "Exit"])
             if not continue_reading or continue_reading == "Exit":

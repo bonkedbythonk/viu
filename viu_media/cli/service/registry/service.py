@@ -6,7 +6,8 @@ from typing import Dict, Generator, List, Optional, TypedDict
 
 from ....core.config.model import MediaRegistryConfig
 from ....core.exceptions import ViuError
-from ....core.utils.file import AtomicWriter, FileLock, check_file_modified
+from ....core.storage.json import load_json, save_json
+from ....core.utils.file import FileLock, check_file_modified
 from ....libs.media_api.params import MediaSearchParams
 from ....libs.media_api.types import (
     MediaItem,
@@ -59,10 +60,10 @@ class MediaRegistryService:
         )
         if not is_modified and self._index is not None:
             return self._index
-        if self._index_file.exists():
+            
+        data = load_json(self._index_file, default=None)
+        if data is not None:
             try:
-                with self._index_file.open("r", encoding="utf-8") as f:
-                    data = json.load(f)
                 self._index = MediaRegistryIndex.model_validate(data)
             except Exception as e:
                 logger.error(f"Malformed state in registry index: {e}. Attempting self-heal.")
@@ -87,8 +88,7 @@ class MediaRegistryService:
         """Save the registry index."""
         with self._lock:
             index.last_updated = datetime.now()
-            with AtomicWriter(self._index_file) as f:
-                json.dump(index.model_dump(mode="json"), f, indent=2)
+            save_json(self._index_file, index.model_dump(mode="json"), indent=2)
 
             logger.debug("saved registry index")
 
@@ -112,8 +112,11 @@ class MediaRegistryService:
         if not record_file.exists():
             return None
 
+        data = load_json(record_file, default=None)
+        if data is None:
+            return None
+            
         try:
-            data = json.load(record_file.open(mode="r", encoding="utf-8"))
             record = MediaRecord.model_validate(data)
             return record
         except Exception as e:
@@ -150,8 +153,7 @@ class MediaRegistryService:
 
             record_file = self._get_media_file_path(media_id)
 
-            with AtomicWriter(record_file) as f:
-                json.dump(record.model_dump(mode="json"), f, indent=2, default=str)
+            save_json(record_file, record.model_dump(mode="json"), indent=2)
 
             logger.debug(f"Saved media record for {media_id}")
             return True
