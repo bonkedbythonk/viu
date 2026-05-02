@@ -156,12 +156,14 @@ def icat_manga_viewer(image_links: list[str], window_title: str):
         console.print("[bold red]kitty (for icat) not found[/]")
         exit(1)
 
+    term_width, term_height = shutil.get_terminal_size((80, 24))
+
     idx, total = 0, len(image_links)
     title = f"{window_title}  ({total} images)"
     show_banner = True
     show_spread = False
     
-    prefetcher = PrefetchManager(image_links)
+    prefetcher = PrefetchManager(image_links, term_height)
 
     try:
         while True:
@@ -185,7 +187,7 @@ def icat_manga_viewer(image_links: list[str], window_title: str):
                 path1 = prefetcher.get_image(idx)
                 if not path1:
                     console.clear()
-                    draw_banner_at(f"Loading page {idx + 1}...", term_height // 2)
+                    draw_banner_at(f"Turbo Loading page {idx + 1}...", term_height // 2)
                     time.sleep(0.1)
                     
             path2 = None
@@ -194,11 +196,14 @@ def icat_manga_viewer(image_links: list[str], window_title: str):
                     path2 = prefetcher.get_image(idx + 1)
                     if not path2:
                         console.clear()
-                        draw_banner_at(f"Loading spread {idx + 2}...", term_height // 2)
+                        draw_banner_at(f"Turbo Loading spread {idx + 2}...", term_height // 2)
                         time.sleep(0.1)
             
-            # Use Pillow to dynamically resize and/or spread the images for fast ICAT draw
-            final_img_path = _prepare_image(path1, path2, image_height)
+            # Use Pillow to dynamically spread the images for fast ICAT draw
+            if path2:
+                final_img_path = _prepare_spread(path1, path2)
+            else:
+                final_img_path = path1
             
             console.clear()
 
